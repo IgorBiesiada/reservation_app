@@ -1,31 +1,141 @@
 from django.db import models
 
 
-
-# Model representing a room
-class Room(models.Model):
-    room_name = models.CharField(max_length=50)  # Room name with a maximum length of 50 characters
-    room_capacity = models.IntegerField()  # Room capacity as an integer
-    projector_available = models.BooleanField(default=False)  # Boolean field to indicate if a projector is available
-
-    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp for when the room was created
-    updated_at = models.DateTimeField(auto_now=True)  # Timestamp for when the room was last updated
-
-    # String representation of the room object
-    def __str__(self):
-        return self.room_name  # Return the room name as its string representation
-
-    # Override the save method (optional customization)
-    def save(self, *args, **kwargs):
-        return super().save(*args, **kwargs)  # Call the parent class's save method
-
-
-# Model representing a reservation for a room
-class Reservation(models.Model):
-    date = models.DateField()  # Reservation date as a date field
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='reservations')  # Foreign key linking to Room model
-    comment = models.TextField(null=True)  # Optional comment field for the reservation
+class Modified(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Stworzony")  
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Zaktualizowany")
 
     class Meta:
-        unique_together = ('room', 'date')  # Ensure a room cannot have more than one reservation on the same date
+        abstract = True
+
+
+class Resource(models.Model):
+    class Category(models.TextChoices):
+        SPORT = 'SPORT', 'Obiekt sportowy'
+        OFFICE = 'OFFICE', 'Przestrzeń biurowa'
+        EVENT = 'EVENT', 'Miejsce eventowe'
+        BEAUTY = 'BEAUTY', 'Gabinet urody'
+        LIVING = 'LIVING', 'Przestrzeń mieszkalna'
+
+    category = models.CharField(max_length=50, choices=Category.choices, verbose_name="Typ kategorii")
+
+    def __str__(self):
+        for related in ['sportresource', 'officeresource', 'eventresource', 'beautyresource', 'livingresource']:
+            if hasattr(self, related):
+                return getattr(self, related).name
+        return f"Zasób ID: {self.id} ({self.get_category_display()})"
+
+
+
+class BaseResource(Modified):
+    resource = models.OneToOneField(Resource, on_delete=models.CASCADE, related_name="%(class)s")
+    
+    name = models.CharField(max_length=100, verbose_name="Nazwa")  
+    equipment = models.TextField(blank=True, verbose_name="Wyposażenie")
+    price_per_hour = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Cena za h')
+    address = models.CharField(max_length=255, verbose_name="Adres")
+    city = models.CharField(max_length=100, verbose_name="Miasto")
+    description = models.TextField(max_length=2000, blank=True, verbose_name="Opis")  
+     
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
+
+# --- MODELE SPECYFICZNE ---
+
+class SportResource(BaseResource):
+    class SportType(models.TextChoices):
+        FOOTBALL = 'FOOTBALL', 'Piłka nożna'
+        TENNIS = 'TENNIS', 'Tenis'
+        VOLLEYBALL = 'VOLLEYBALL', 'Siatkówka'
+        GOLF = 'GOLF', 'Golf'
+
+    sport_type = models.CharField(max_length=50, choices=SportType.choices, verbose_name='Dyscyplina')
+    surface = models.CharField(max_length=50, blank=True, verbose_name='Nawierzchnia')
+    is_outside = models.BooleanField(default=False, verbose_name='Na zewnątrz')
+    capacity = models.PositiveIntegerField(null=True, blank=True, verbose_name='Liczba graczy')
+
+
+class OfficeResource(BaseResource):
+    desks = models.PositiveIntegerField(verbose_name='Liczba biurek')
+    meeting_rooms = models.PositiveIntegerField(default=0, verbose_name='Liczba sal konferencyjnych') 
+    has_wifi = models.BooleanField(default=True, verbose_name="WIFI")
+    has_parking = models.BooleanField(default=False, verbose_name="Parking")
+
+
+class EventResource(BaseResource):
+    class EventType(models.TextChoices):
+        BUSINESS = 'BUSINESS', 'Event biznesowy'
+        INTEGRATION = 'INTEGRATION', 'Event integracyjny'
+        MARKETING = 'MARKETING', 'Event marketingowy'
+        ENTERTAINMENT = 'ENTERTAINMENT', 'Event rozrywkowy'
+
+    class EventMode(models.TextChoices):
+        ONLINE = 'ONLINE', 'Online'
+        HYBRID = 'HYBRID', 'Hybrydowy'
+        ONSITE = 'ONSITE', 'Stacjonarny'
+    
+    event_type = models.CharField(max_length=50, choices=EventType.choices, verbose_name='Typ eventu')
+    event_mode = models.CharField(max_length=50, choices=EventMode.choices, verbose_name='Tryb eventu')  
+    capacity = models.PositiveIntegerField(verbose_name='Liczba miejsc')
+    sound_system = models.BooleanField(default=False, verbose_name='Nagłośnienie')
+    tv_set = models.BooleanField(default=False, verbose_name='Telewizor/Ekran')
+    stage = models.BooleanField(default=False, verbose_name='Scena')
+    catering = models.BooleanField(default=False, verbose_name='Catering')
+    parking = models.BooleanField(default=False, verbose_name='Parking')
+    wifi = models.BooleanField(default=True, verbose_name='WIFI')
+
+
+class BeautyResource(BaseResource):
+    class BeautyType(models.TextChoices):
+        HAIRDRESSER = 'HAIRDRESSER', 'Fryzjer'
+        BARBER = 'BARBER', 'Barber'
+        NAILS = 'NAILS', 'Paznokcie'
+        COSMETOLOGY = 'COSMETOLOGY', 'Kosmetologia'
+        MASSAGE = 'MASSAGE', 'Masaż'
+    
+    beauty_type = models.CharField(max_length=50, choices=BeautyType.choices, verbose_name='Typ salonu')
+    chairs = models.PositiveIntegerField(null=True, blank=True, verbose_name='Liczba foteli')  
+    beds = models.PositiveIntegerField(null=True, blank=True, verbose_name='Liczba łóżek')    
+    has_mirror = models.BooleanField(default=True, verbose_name='Lustro')
+    has_sink = models.BooleanField(default=False, verbose_name='Zlew')
+    has_shower = models.BooleanField(default=False, verbose_name='Prysznic')
+    parking = models.BooleanField(default=False, verbose_name='Parking')
+    wifi = models.BooleanField(default=True, verbose_name='WIFI')
+
+
+class LivingResource(BaseResource):
+    class LivingType(models.TextChoices):
+        ROOM = 'ROOM', 'Pokój'
+        APARTMENT = 'APARTMENT', 'Mieszkanie'
+        SUMMER_HOUSE = 'SUMMER', 'Dom letniskowy'
+        HOUSE = 'HOUSE', 'Dom jednorodzinny'
+
+    living_type = models.CharField(max_length=50, choices=LivingType.choices, default=LivingType.ROOM, verbose_name="Typ obiektu")
+    rooms_count = models.PositiveIntegerField(default=1, verbose_name='Liczba pokoi')
+    parking = models.BooleanField(default=False, verbose_name='Parking')
+    wifi = models.BooleanField(default=False, verbose_name='WIFI')
+    capacity = models.PositiveIntegerField(verbose_name='Liczba osób')
+    full_equipment = models.BooleanField(default=False, verbose_name='Pełne wyposażenie')
+
+
+class ResourceImage(models.Model):
+    image = models.ImageField(upload_to="resource_images/")
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='images')
+
+    def __str__(self):
+        return f"Zdjęcie dla {self.resource}"
+    
+
+    
+class Reservation(models.Model):
+    date = models.DateField()  # Reservation date as a date field
+    room = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='reservations') 
+    comment = models.TextField(null=True)  
+
+    class Meta:
+        unique_together = ('room', 'date')  
 
