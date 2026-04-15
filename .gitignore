@@ -1,12 +1,43 @@
-.idea
-.vscode
-**/*.pyc
+# --- PYTHON ---
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.python-version
+venv/
+.venv/
+env/
+ENV/
 
-venv
-
-.env
-
+# --- DJANGO ---
 db.sqlite3
+db.sqlite3-journal
+*.log
+local_settings.py
+media/
+# Ignorowanie zdjęć z konkretnego folderu static (zgodnie z prośbą)
+static/images/
 
-media/*
-!media/.gitkeep
+# --- MIGRACJE ---
+# Ignorujemy pliki migracji, ale zostawiamy __init__.py, 
+# żeby folder był widoczny dla Pythona
+**/migrations/*.py
+!**/migrations/__init__.py
+**/migrations/__pycache__/
+
+# --- SECURITY (KLUCZOWE!) ---
+# Nigdy nie wrzucaj haseł z .env na GitHub!
+.env
+.env.local
+.env.*
+
+# --- IDE & TOOLS ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- DOCKER ---
+.docker/
