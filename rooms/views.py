@@ -5,35 +5,50 @@ from django.views import View
 from django.views.generic import ListView, UpdateView, DeleteView, DetailView, CreateView
 from django.contrib import messages
 
-from . forms import SportForm
+from . forms import SportForm, OfficeForm
 from . import models
 
 
-class AddSportsResource(CreateView):
+class AddSportsResourceView(CreateView):
     model = models.SportResource
     form_class = SportForm
     template_name = "rooms/sport_form.html"
     context_object_name = "sport"
 
 
-class EditSportResource(UpdateView):
+class EditSportResourceView(UpdateView):
     model = models.SportResource
     form_class = SportForm
     fields = "__all__"
     context_object_name = "sport"
 
 
- # View for listing all rooms
+class AddOfficeResourceView(CreateView):
+    model  = models.OfficeResource
+    form_class = OfficeForm
+    template_name = "rooms/office_form.html"
+    context_object_name = "office"
+
+
+class DeleteResourceView(DeleteView):
+    models = models.SportResource
+    success_url = reverse_lazy("resource_list") 
+
+
+# View for listing all resources
 class ResourceListView(ListView):
     model = models.BaseResource  
     template_name = 'rooms/resource_list.html'  
     context_object_name = 'resources'  
 
     def get_queryset(self):
-        return super().get_queryset().select_related(
-            'sportresource', 'officeresource', 'eventresource'
-        )
-
+        return models.BaseResource.objects.select_related(
+            'sportresource', 
+            'officeresource', 
+            'eventresource', 
+            'beautyresource', 
+            'livingresource'
+        ).all()
 
 # # View for deleting a room
 # class DeleteRoomView(View):
