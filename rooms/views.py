@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import ListView, UpdateView, DeleteView, DetailView, CreateView
 from django.contrib import messages
 
-from . forms import SportForm, OfficeForm
+from . forms import SportForm, OfficeForm, EventForm, BeautyForm, LivingForm
 from . import models
 
 
@@ -28,6 +28,55 @@ class AddOfficeResourceView(CreateView):
     form_class = OfficeForm
     template_name = "rooms/office_form.html"
     context_object_name = "office"
+
+
+class EditOfficeResourceView(UpdateView):
+    model = models.OfficeResource
+    form_class = OfficeForm
+    fields = "__all__"
+    context_object_name = "office"
+
+
+class AddEventResourceView(CreateView):
+    model = models.EventResource
+    form_class = EventForm
+    template_name = "rooms/event_from.html"
+    context_object_name = "event"
+
+
+class EditEventResourceView(UpdateView):
+    model = models.EventResource
+    form_class = EventForm
+    fields = "__all__"
+    context_object_name = "event"
+
+
+class AddBeautyResourceView(CreateView):
+    model = models.BeautyResource
+    form_class = BeautyForm
+    template_name = "rooms/beauty_form.html"
+    context_object_name = "beauty"
+
+
+class EditBeautyResourceView(UpdateView):
+    model = models.BeautyResource
+    form_class = BeautyForm
+    fields = "__all__"
+    context_object_name = "beauty"
+
+
+class AddLivingResourceView(CreateView):
+    model = models.LivingResource
+    form_class = LivingForm
+    template_name = "rooms/living_form.html"
+    context_object_name = "living"
+
+
+class EditLivingResourceView(UpdateView):
+    model = models.LivingResource
+    form_class = LivingForm
+    fields = "__all__"
+    context_object_name = "living"
 
 
 class DeleteResourceView(DeleteView):
