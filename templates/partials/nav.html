@@ -7,16 +7,21 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
+      <a href="{% url 'rooms:resource_list' %}" class="btn btn-primary">Lista</a>
       <div class="btn-group" role="group">
     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
       Dodaj
     </button>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="{% url ''%}">Dropdown link</a></li>
-          <li><a class="dropdown-item" href="#">Dropdown link</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_sport' %}">przestrzeń sport</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_office' %}">przestrzeń biurowa</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_event' %}">przestrzeń eventowa</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_beauty' %}">przestrzeń branży beauty</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_living' %}">przestrzeń mieszkalna</a></li>
         </ul>
       </div>
     </div>
+    
       <span class="navbar-text">
             <p>Place to write</p>
       </span>

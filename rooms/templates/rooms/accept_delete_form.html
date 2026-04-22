@@ -1,0 +1,15 @@
+
+{% load static %}
+{%  load crispy_forms_tags %}
+
+{% block title %}Delete  {% endblock %}
+
+{%block container %}
+<form method="post">
+    {% csrf_token %}
+    
+    <p>Czy na pewno chcesz usunąć "{{ object }}"?</p>
+    <button type="submit">Tak, usuń</button>
+    <a href="{% url 'rooms:resource_list' %}">Anuluj</a>
+</form>
+{% endblock %}

@@ -40,7 +40,7 @@ class EditOfficeResourceView(UpdateView):
 class AddEventResourceView(CreateView):
     model = models.EventResource
     form_class = EventForm
-    template_name = "rooms/event_from.html"
+    template_name = "rooms/event_form.html"
     context_object_name = "event"
 
 
@@ -50,6 +50,12 @@ class EditEventResourceView(UpdateView):
     fields = "__all__"
     context_object_name = "event"
 
+
+class EventDetailView(DetailView):
+    model = models.EventResource
+    context_object_name = 'event'
+    queryset = models.EventResource.objects.all()
+    template_name = "rooms/event_detail.html"
 
 class AddBeautyResourceView(CreateView):
     model = models.BeautyResource
@@ -80,8 +86,9 @@ class EditLivingResourceView(UpdateView):
 
 
 class DeleteResourceView(DeleteView):
-    models = models.SportResource
-    success_url = reverse_lazy("resource_list") 
+    model = models.BaseResource
+    success_url = reverse_lazy("rooms:resource_list") 
+    template_name = 'rooms/accept_delete_form.html'
 
 
 # View for listing all resources
