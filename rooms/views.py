@@ -107,6 +107,36 @@ class ResourceListView(ListView):
         ).all()
         
 
+def edit_resource(request, pk):
+    base_resource = get_object_or_404(models.BaseResource, pk=pk)
+
+    if hasattr(base_resource, 'sportresource'):
+        instance = base_resource.sportresource
+        form_class = SportForm
+    elif hasattr(base_resource, 'officeresource'):
+        instance = base_resource.officeresource
+        form_class = OfficeForm
+    elif hasattr(base_resource, 'eventresource'):
+        instance = base_resource.eventresource
+        form_class = EventForm
+    elif hasattr(base_resource, 'beautyresource'):
+        instance = base_resource.beautyresource
+        form_class = BeautyForm
+    elif hasattr(base_resource, 'livingresource'):
+        instance = base_resource.livingresource
+        form_class = LivingForm
+    
+    if request.method == 'POST':
+        form = form_class(request.POST, request.FILES, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect('rooms:resource_list.html')
+    
+    else:
+        form = form_class(instance=instance)
+    
+    return render(request, 'edit_resource.html', {'form': form})
+
 
 # # View for displaying detailed information about a room
 # class DetailRoomView(View):

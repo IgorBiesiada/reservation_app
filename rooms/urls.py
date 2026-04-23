@@ -12,7 +12,8 @@ from .views import (AddSportsResourceView,
                     AddBeautyResourceView,
                     EditBeautyResourceView,
                     AddLivingResourceView,
-                    EditLivingResourceView 
+                    EditLivingResourceView,
+                    edit_resource 
                     )
 
 app_name = 'rooms'
@@ -30,5 +31,6 @@ urlpatterns = [
     path('/add_beauty', AddBeautyResourceView.as_view(), name="add_beauty"),
     path('/<pk>/edit_beauty', EditBeautyResourceView.as_view(), name="edit_beauty"),
     path('add_living', AddLivingResourceView.as_view(), name="add_living"),
-    path('/<pk>/edit_living', EditLivingResourceView.as_view(), name="edit_living")
+    path('/<pk>/edit_living', EditLivingResourceView.as_view(), name="edit_living"),
+    path('edit_resource/<int:pk>', edit_resource, name="edit_resource")
 ]
