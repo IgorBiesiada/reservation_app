@@ -130,12 +130,28 @@ def edit_resource(request, pk):
         form = form_class(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
-            return redirect('rooms:resource_list.html')
+            return redirect('rooms:resource_list')
     
     else:
         form = form_class(instance=instance)
     
-    return render(request, 'edit_resource.html', {'form': form})
+    return render(request, 'rooms/edit_resource.html', {'form': form})
+
+def detail_resource(request, pk):
+    base_resource = get_object_or_404(models.BaseResource, pk=pk)
+
+    possible_resource = ['sportresource', 'officeresource',
+                         'eventresource', 'beautyresource',
+                         'livingresource']
+    
+    instance = None
+    
+    for atr in possible_resource:
+        if hasattr(base_resource, atr):
+            instance = base_resource.atr
+
+    if request.method == 'GET':
+        
 
 
 # # View for displaying detailed information about a room
