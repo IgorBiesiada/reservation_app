@@ -14,7 +14,7 @@ class AddSportsResourceView(CreateView):
     form_class = SportForm
     template_name = "rooms/sport_form.html"
     context_object_name = "sport"
-
+    success_url = 'resource/list'
 
 class EditSportResourceView(UpdateView):
     model = models.SportResource
@@ -140,22 +140,32 @@ def edit_resource(request, pk):
 def detail_resource(request, pk):
     base_resource = get_object_or_404(models.BaseResource, pk=pk)
 
-    possible_resource = ['sportresource', 'officeresource',
-                         'eventresource', 'beautyresource',
-                         'livingresource']
-    
-    instance = None
-    
-    for atr in possible_resource:
-        if hasattr(base_resource, atr):
-            instance = hasattr(base_resource, atr)
-            break
+    instance = base_resource
+    template_name = 'rooms/base_detail.html' 
 
-    context = {
-        'resource': instance
-    }
+    # 2. Sprawdzamy konkretne typy
+    if hasattr(base_resource, 'sportresource'):
+        instance = base_resource.sportresource
+        template_name = 'rooms/sport_detail.html'
+    
+    elif hasattr(base_resource, 'officeresource'):
+        instance = base_resource.officeresource
+        template_name = 'rooms/office_detail.html'
+    
+    elif hasattr(base_resource, 'eventresource'):
+        instance = base_resource.eventresource
+        template_name = 'rooms/event_detail.html'
+    
+    elif hasattr(base_resource, 'beautyresource'):
+        instance = base_resource.beautyresource
+        template_name = 'rooms/beauty_detail.html'
+    
+    elif hasattr(base_resource, 'livingresource'):
+        instance = base_resource.livingresource
+        template_name = 'rooms/living_detail.html'
 
-    return render()
+    
+    return render(request, template_name, {'resource': instance})
         
 
 

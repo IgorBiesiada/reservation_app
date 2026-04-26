@@ -16,7 +16,7 @@
     <h5 class="card-title">{{r.name}}</h5>
     <p class="card-text">{{r.price_per_hour}}</p>
     <p class="card-text"><small class="text-body-secondary">{{r.updated_at}}</small></p>
-    <a href="#" class="btn btn-primary">Szczegóły</a>
+    <a href="{% url 'rooms:resource_list' %}" class="btn btn-primary">Szczegóły</a>
     <a href="{% url 'rooms:delete' r.pk %}" class="btn btn-primary">Usuń</a>
     <a href="{% url 'rooms:edit_resource' r.pk %}" class="btn btn-primary">Edytuj</a>
   </div>

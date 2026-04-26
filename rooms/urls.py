@@ -13,14 +13,15 @@ from .views import (AddSportsResourceView,
                     EditBeautyResourceView,
                     AddLivingResourceView,
                     EditLivingResourceView,
-                    edit_resource 
+                    edit_resource,
+                    detail_resource 
                     )
 
 app_name = 'rooms'
 
 #addresses to subpages
 urlpatterns = [
-    path('/add_sport/', AddSportsResourceView.as_view(), name="add_sport"),
+    path('add_sport/', AddSportsResourceView.as_view(), name="add_sport"),
     path('/<pk>/edit_sport/', EditSportResourceView.as_view(), name="edit_sport"),
     path('', ResourceListView.as_view(), name='resource_list'),
     path('/add_office', AddOfficeResourceView.as_view(), name="add_office"),
@@ -32,5 +33,6 @@ urlpatterns = [
     path('/<pk>/edit_beauty', EditBeautyResourceView.as_view(), name="edit_beauty"),
     path('add_living', AddLivingResourceView.as_view(), name="add_living"),
     path('/<pk>/edit_living', EditLivingResourceView.as_view(), name="edit_living"),
-    path('edit_resource/<int:pk>', edit_resource, name="edit_resource")
+    path('edit_resource/<int:pk>', edit_resource, name="edit_resource"),
+    path('resource/<int:pk>', detail_resource, name='resource_detail')
 ]
