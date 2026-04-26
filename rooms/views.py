@@ -148,9 +148,14 @@ def detail_resource(request, pk):
     
     for atr in possible_resource:
         if hasattr(base_resource, atr):
-            instance = base_resource.atr
+            instance = hasattr(base_resource, atr)
+            break
 
-    if request.method == 'GET':
+    context = {
+        'resource': instance
+    }
+
+    return render()
         
 
 
