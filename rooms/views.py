@@ -16,24 +16,11 @@ class AddSportsResourceView(CreateView):
     context_object_name = "sport"
     success_url = 'resource/list'
 
-class EditSportResourceView(UpdateView):
-    model = models.SportResource
-    form_class = SportForm
-    fields = "__all__"
-    context_object_name = "sport"
-
 
 class AddOfficeResourceView(CreateView):
     model  = models.OfficeResource
     form_class = OfficeForm
     template_name = "rooms/office_form.html"
-    context_object_name = "office"
-
-
-class EditOfficeResourceView(UpdateView):
-    model = models.OfficeResource
-    form_class = OfficeForm
-    fields = "__all__"
     context_object_name = "office"
 
 
@@ -44,19 +31,6 @@ class AddEventResourceView(CreateView):
     context_object_name = "event"
 
 
-class EditEventResourceView(UpdateView):
-    model = models.EventResource
-    form_class = EventForm
-    fields = "__all__"
-    context_object_name = "event"
-
-
-class EventDetailView(DetailView):
-    model = models.EventResource
-    context_object_name = 'event'
-    queryset = models.EventResource.objects.all()
-    template_name = "rooms/event_detail.html"
-
 class AddBeautyResourceView(CreateView):
     model = models.BeautyResource
     form_class = BeautyForm
@@ -64,24 +38,10 @@ class AddBeautyResourceView(CreateView):
     context_object_name = "beauty"
 
 
-class EditBeautyResourceView(UpdateView):
-    model = models.BeautyResource
-    form_class = BeautyForm
-    fields = "__all__"
-    context_object_name = "beauty"
-
-
 class AddLivingResourceView(CreateView):
     model = models.LivingResource
     form_class = LivingForm
     template_name = "rooms/living_form.html"
-    context_object_name = "living"
-
-
-class EditLivingResourceView(UpdateView):
-    model = models.LivingResource
-    form_class = LivingForm
-    fields = "__all__"
     context_object_name = "living"
 
 
