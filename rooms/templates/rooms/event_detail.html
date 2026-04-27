@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block container %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h2 class="mb-0">🎉 {{ resource.name }}</h2>
+                    <p class="mb-0 opacity-75">{{ resource.get_event_type_display }} ({{ resource.get_event_mode_display }})</p>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <p class="text-muted mb-0">Adres</p>
+                            <p class="fw-bold">{{ resource.address }}, {{ resource.city }}</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <p class="text-muted mb-0">Pojemność</p>
+                            <p class="fs-4 fw-bold text-dark">{{ resource.capacity }} osób</p>
+                        </div>
+                    </div>
+
+                    <h5 class="card-title border-bottom pb-2">Udogodnienia eventowe</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li>{% if resource.sound_system %}✅{% else %}❌{% endif %} Nagłośnienie</li>
+                                <li>{% if resource.tv_set %}✅{% else %}❌{% endif %} Ekran/TV</li>
+                                <li>{% if resource.stage %}✅{% else %}❌{% endif %} Scena</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li>{% if resource.catering %}✅{% else %}❌{% endif %} Catering</li>
+                                <li>{% if resource.wifi %}✅{% else %}❌{% endif %} WIFI</li>
+                                <li>{% if resource.parking %}✅{% else %}❌{% endif %} Parking</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p class="card-text border-top pt-3">{{ resource.description }}</p>
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-between py-3">
+                    <a href="{% url 'rooms:resource_list' %}" class="btn btn-outline-secondary">Wróć</a>
+                    <a href="{% url 'rooms:edit_resource' resource.pk %}" class="btn btn-warning">Edytuj</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
