@@ -34,5 +34,5 @@ urlpatterns = [
     path('add_living', AddLivingResourceView.as_view(), name="add_living"),
     path('/<pk>/edit_living', EditLivingResourceView.as_view(), name="edit_living"),
     path('edit_resource/<int:pk>', edit_resource, name="edit_resource"),
-    path('resource/<int:pk>', detail_resource, name='resource_detail')
+    path('resource_detail/<int:pk>', detail_resource, name='resource_detail')
 ]
