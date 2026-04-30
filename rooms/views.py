@@ -1,10 +1,6 @@
-import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import ListView, UpdateView, DeleteView, DetailView, CreateView
-from django.contrib import messages
-
+from django.views.generic import ListView, DeleteView, CreateView
 from . forms import SportForm, OfficeForm, EventForm, BeautyForm, LivingForm
 from . import models
 
@@ -127,7 +123,6 @@ def detail_resource(request, pk):
     
     return render(request, template_name, {'resource': instance})
         
-
 
 # # View for displaying detailed information about a room
 # class DetailRoomView(View):

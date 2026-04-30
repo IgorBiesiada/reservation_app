@@ -2,17 +2,12 @@ from django.urls import path
 
 
 from .views import (AddSportsResourceView, 
-                    EditSportResourceView, 
                     ResourceListView, 
                     AddOfficeResourceView,
-                    EditOfficeResourceView, 
                     DeleteResourceView, 
                     AddEventResourceView, 
-                    EditEventResourceView,
                     AddBeautyResourceView,
-                    EditBeautyResourceView,
                     AddLivingResourceView,
-                    EditLivingResourceView,
                     edit_resource,
                     detail_resource 
                     )
