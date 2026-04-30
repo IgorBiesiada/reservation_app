@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'debug_toolbar',
-
+    'crispy_forms',
+    'crispy_bootstrap5',
 
     #app
     'rooms.apps.RoomsConfig',
@@ -155,3 +156,7 @@ INTERNAL_IPS = [
     "127.0.01.",
     "localhost"
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"

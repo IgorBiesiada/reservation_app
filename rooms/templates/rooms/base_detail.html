@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block container %}
+<div class="container mt-4">
+    <div class="card border-secondary shadow">
+        <div class="card-header bg-secondary text-white">
+            <h2>Zasób: {{ resource.name }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Cena:</strong> {{ resource.price_per_hour }} PLN</p>
+            <p><strong>Opis:</strong> {{ resource.description }}</p>
+            <div class="alert alert-warning">
+                To jest widok podstawowy. Szczegóły dla tego typu zasobu są jeszcze w budowie!
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

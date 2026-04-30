@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block container %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-success text-white py-3">
+                    <h2 class="mb-0"> {{ resource.name }}</h2>
+                    <p class="mb-0 opacity-75">{{ resource.get_sport_type_display }}</p>
+                </div>
+
+                <div class="card-body">
+                    <h5 class="card-title border-bottom pb-2">Informacje ogólne</h5>
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <p class="text-muted mb-0">Adres</p>
+                            <p class="fw-bold">{{ resource.address }}, {{ resource.city }}</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <p class="text-muted mb-0">Cena za godzinę</p>
+                            <p class="fs-4 text-success fw-bold">{{ resource.price_per_hour }} PLN</p>
+                        </div>
+                    </div>
+
+                    <h5 class="card-title border-bottom pb-2">Specyfikacja obiektu</h5>
+                    <ul class="list-group list-group-flush mb-4">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Nawierzchnia:</span>
+                            <span class="fw-bold">{{ resource.surface|default:"Brak danych" }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Lokalizacja:</span>
+                            <span class="badge {% if resource.is_outside %}bg-info{% else %}bg-secondary{% endif %}">
+                                {{ resource.is_outside|yesno:"Na zewnątrz,Hala/Pod dachem" }}
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Max. liczba graczy:</span>
+                            <span class="fw-bold">{{ resource.capacity|default:"Brak limitu" }}</span>
+                        </li>
+                    </ul>
+
+                    <h5 class="card-title border-bottom pb-2">Opis i Wyposażenie</h5>
+                    <p class="card-text">{{ resource.description }}</p>
+                    <div class="bg-light p-3 rounded">
+                        <small class="text-muted d-block mb-1 text-uppercase">Dostępny sprzęt:</small>
+                        {{ resource.equipment|linebreaks }}
+                    </div>
+                </div>
+
+                <div class="card-footer bg-white d-flex justify-content-between py-3">
+                    <a href="{% url 'rooms:resource_list' %}" class="btn btn-outline-secondary">Wróć do listy</a>
+                    <a href="{% url 'rooms:edit_resource' resource.pk %}" class="btn btn-warning">Edytuj obiekt</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

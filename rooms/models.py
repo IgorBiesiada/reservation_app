@@ -9,7 +9,7 @@ class Modified(models.Model):
         abstract = True
 
 
-class Resource(models.Model):
+class BaseResource(Modified):
     class Category(models.TextChoices):
         SPORT = 'SPORT', 'Obiekt sportowy'
         OFFICE = 'OFFICE', 'Przestrzeń biurowa'
@@ -18,18 +18,6 @@ class Resource(models.Model):
         LIVING = 'LIVING', 'Przestrzeń mieszkalna'
 
     category = models.CharField(max_length=50, choices=Category.choices, verbose_name="Typ kategorii")
-
-    def __str__(self):
-        for related in ['sportresource', 'officeresource', 'eventresource', 'beautyresource', 'livingresource']:
-            if hasattr(self, related):
-                return getattr(self, related).name
-        return f"Zasób ID: {self.id} ({self.get_category_display()})"
-
-
-
-class BaseResource(Modified):
-    resource = models.OneToOneField(Resource, on_delete=models.CASCADE, related_name="%(class)s")
-    
     name = models.CharField(max_length=100, verbose_name="Nazwa")  
     equipment = models.TextField(blank=True, verbose_name="Wyposażenie")
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Cena za h')
@@ -38,7 +26,7 @@ class BaseResource(Modified):
     description = models.TextField(max_length=2000, blank=True, verbose_name="Opis")  
      
     class Meta:
-        abstract = True
+        verbose_name = "Zasób bazowy"
 
     def __str__(self):
         return self.name
@@ -124,7 +112,7 @@ class LivingResource(BaseResource):
 
 class ResourceImage(models.Model):
     image = models.ImageField(upload_to="resource_images/")
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='images')
+    resource = models.ForeignKey(BaseResource, on_delete=models.CASCADE, related_name='images')
 
     def __str__(self):
         return f"Zdjęcie dla {self.resource}"
@@ -133,7 +121,7 @@ class ResourceImage(models.Model):
     
 class Reservation(models.Model):
     date = models.DateField()  # Reservation date as a date field
-    room = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='reservations') 
+    room = models.ForeignKey(BaseResource, on_delete=models.CASCADE, related_name='reservations') 
     comment = models.TextField(null=True)  
 
     class Meta:

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{%  load crispy_forms_tags %}
+
+{% block title %}Sport Form {% endblock %}
+
+{% block container %}
+
+
+    <form action="{% url 'rooms:add_sport' %}" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <input class="btn btn-primary" type="submit" value="Add Product my Lord!">
+    </form>
+
+
+{% endblock %}
+

@@ -2,4 +2,5 @@ from django.contrib import admin
 
 from . import models
 
-admin.site.register(models.LivingResource)
+admin.site.register(models.SportResource)
+

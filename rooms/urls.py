@@ -1,18 +1,28 @@
 from django.urls import path
 
 
-from .views import RoomListView, AddRoomView, DeleteRoomView, RoomModifyView, ReservationView, DetailRoomView, \
-    RoomSearchView
+from .views import (AddSportsResourceView, 
+                    ResourceListView, 
+                    AddOfficeResourceView,
+                    DeleteResourceView, 
+                    AddEventResourceView, 
+                    AddBeautyResourceView,
+                    AddLivingResourceView,
+                    edit_resource,
+                    detail_resource 
+                    )
 
 app_name = 'rooms'
 
 #addresses to subpages
 urlpatterns = [
-    path('room/new/', AddRoomView.as_view(), name="add-room"),
-    path('', RoomListView.as_view(), name='room-list'),
-    path('room/delete/<int:room_id>/', DeleteRoomView.as_view(), name="delete-room"),
-    path('room/modify/<int:id>/', RoomModifyView.as_view(), name="update-room"),
-    path('room/reserve/<int:room_id>', ReservationView.as_view(), name='reservation'),
-    path('room/detail/<int:room_id>/', DetailRoomView.as_view(), name='room-detail'),
-    path('room/search/', RoomSearchView.as_view(), name='room-search')
+    path('add_sport/', AddSportsResourceView.as_view(), name="add_sport"),
+    path('', ResourceListView.as_view(), name='resource_list'),
+    path('/add_office', AddOfficeResourceView.as_view(), name="add_office"),
+    path('delete/<int:pk>/', DeleteResourceView.as_view(), name="delete"),
+    path('/add_event', AddEventResourceView.as_view(), name="add_event"),
+    path('/add_beauty', AddBeautyResourceView.as_view(), name="add_beauty"),
+    path('add_living', AddLivingResourceView.as_view(), name="add_living"),
+    path('edit_resource/<int:pk>', edit_resource, name="edit_resource"),
+    path('resource_detail/<int:pk>', detail_resource, name='resource_detail')
 ]

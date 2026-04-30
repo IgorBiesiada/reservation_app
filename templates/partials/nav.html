@@ -7,17 +7,21 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'rooms:room-list' %}">Rooms</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'rooms:add-room' %}">Add room</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link" href="{% url 'rooms:room-search' %}">Search</a>
-        </li>
-      </ul>
+      <a href="{% url 'rooms:resource_list' %}" class="btn btn-primary">Lista</a>
+      <div class="btn-group" role="group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      Dodaj
+    </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="{% url 'rooms:add_sport' %}">przestrzeń sport</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_office' %}">przestrzeń biurowa</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_event' %}">przestrzeń eventowa</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_beauty' %}">przestrzeń branży beauty</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_living' %}">przestrzeń mieszkalna</a></li>
+        </ul>
+      </div>
+    </div>
+    
       <span class="navbar-text">
             <p>Place to write</p>
       </span>
