@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
 
     #app
-    'rooms.apps.RoomsConfig',
-
+    'rooms',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -160,3 +160,5 @@ INTERNAL_IPS = [
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+AUTH_USER_MODEL = 'users.User'
