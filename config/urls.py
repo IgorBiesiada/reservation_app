@@ -25,6 +25,7 @@ from config import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('rooms.urls')),
+    path('', include('users.urls'))
 ] + debug_toolbar_urls()
 
 if settings.DEBUG:

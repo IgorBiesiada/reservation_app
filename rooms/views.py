@@ -3,9 +3,11 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView, CreateView
 from . forms import SportForm, OfficeForm, EventForm, BeautyForm, LivingForm
 from . import models
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 
-class AddSportsResourceView(CreateView):
+class AddSportsResourceView(LoginRequiredMixin, CreateView):
     model = models.SportResource
     form_class = SportForm
     template_name = "rooms/sport_form.html"
@@ -13,35 +15,35 @@ class AddSportsResourceView(CreateView):
     success_url = 'resource/list'
 
 
-class AddOfficeResourceView(CreateView):
+class AddOfficeResourceView(LoginRequiredMixin, CreateView):
     model  = models.OfficeResource
     form_class = OfficeForm
     template_name = "rooms/office_form.html"
     context_object_name = "office"
 
 
-class AddEventResourceView(CreateView):
+class AddEventResourceView(LoginRequiredMixin, CreateView):
     model = models.EventResource
     form_class = EventForm
     template_name = "rooms/event_form.html"
     context_object_name = "event"
 
 
-class AddBeautyResourceView(CreateView):
+class AddBeautyResourceView(LoginRequiredMixin, CreateView):
     model = models.BeautyResource
     form_class = BeautyForm
     template_name = "rooms/beauty_form.html"
     context_object_name = "beauty"
 
 
-class AddLivingResourceView(CreateView):
+class AddLivingResourceView(LoginRequiredMixin, CreateView):
     model = models.LivingResource
     form_class = LivingForm
     template_name = "rooms/living_form.html"
     context_object_name = "living"
 
 
-class DeleteResourceView(DeleteView):
+class DeleteResourceView(LoginRequiredMixin, DeleteView):
     model = models.BaseResource
     success_url = reverse_lazy("rooms:resource_list") 
     template_name = 'rooms/accept_delete_form.html'
@@ -63,6 +65,7 @@ class ResourceListView(ListView):
         ).all()
         
 
+@login_required
 def edit_resource(request, pk):
     base_resource = get_object_or_404(models.BaseResource, pk=pk)
 
