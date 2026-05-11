@@ -1,5 +1,5 @@
 from django.db import models
-
+from users.models import User
 
 class Modified(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Stworzony")  
@@ -24,7 +24,8 @@ class BaseResource(Modified):
     address = models.CharField(max_length=255, verbose_name="Adres")
     city = models.CharField(max_length=100, verbose_name="Miasto")
     description = models.TextField(max_length=2000, blank=True, verbose_name="Opis")  
-     
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, name='creator') 
+    
     class Meta:
         verbose_name = "Zasób bazowy"
 
