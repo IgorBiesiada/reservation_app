@@ -7,7 +7,7 @@
 {% block container %}
 
 
-    <form action="{% url 'reservation:reservation' %}" method="post">
+    <form action="{% url 'reservation:reservation' resource.pk %}" method="post">
         {% csrf_token %}
         {{ form|crispy }}
 
