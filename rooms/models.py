@@ -117,13 +117,3 @@ class ResourceImage(models.Model):
     def __str__(self):
         return f"Zdjęcie dla {self.resource}"
     
-
-    
-class Reservation(models.Model):
-    date = models.DateField()  # Reservation date as a date field
-    room = models.ForeignKey(BaseResource, on_delete=models.CASCADE, related_name='reservations') 
-    comment = models.TextField(null=True)  
-
-    class Meta:
-        unique_together = ('room', 'date')  
-

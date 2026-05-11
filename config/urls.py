@@ -25,7 +25,8 @@ from config import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('rooms.urls')),
-    path('', include('users.urls'))
+    path('', include('users.urls')),
+    path('', include('reservation.urls'))
 ] + debug_toolbar_urls()
 
 if settings.DEBUG:

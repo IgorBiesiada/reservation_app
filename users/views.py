@@ -5,7 +5,7 @@ from . forms import UserRegistrationForm, UserLoginForm
 from . import models
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-
+from django.urls import reverse_lazy
 # Create your views here.
 
 
@@ -13,7 +13,7 @@ class CreateUserView(CreateView):
     model = models.User
     form_class = UserRegistrationForm
     template_name = 'users/register_form.html'
-    success_url = 'users/login'
+    success_url = reverse_lazy('users:login')
 
 
 class LoginUserView(LoginView):

@@ -51,6 +51,7 @@
 
                 <div class="card-footer bg-white d-flex justify-content-between py-3">
                     <a href="{% url 'rooms:resource_list' %}" class="btn btn-outline-secondary">Wróć do listy</a>
+                    <a href="{% url 'reservation:reservation' resource.pk %}" class="btn btn-outline-secondary">Zarezerwuj</a>
                     <a href="{% url 'rooms:edit_resource' resource.pk %}" class="btn btn-warning">Edytuj obiekt</a>
                 </div>
             </div>
