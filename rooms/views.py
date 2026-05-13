@@ -1,46 +1,96 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView, CreateView
-from . forms import SportForm, OfficeForm, EventForm, BeautyForm, LivingForm
+from . import forms
 from . import models
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 
-class AddSportsResourceView(LoginRequiredMixin, CreateView):
-    model = models.SportResource
-    form_class = SportForm
-    template_name = "rooms/sport_form.html"
-    context_object_name = "sport"
-    success_url = 'resource/list'
+class AddResourceView(LoginRequiredMixin, CreateView):
+    success_url = reverse_lazy('rooms:resource_list')
+    
+    def get_queryset(self):
+        resource_type = self.kwargs.get('resource_type')
+        if resource_type == 'sport':
+            return models.SportResource.objects.all()
+        
+        elif resource_type == 'office':
+            return models.OfficeResource.objects.all()
+        
+        elif resource_type == 'event':
+            return models.EventResource.objects.all()
+        
+        elif resource_type == 'beauty':
+            return models.BeautyResource.objects.all()
+        
+        elif resource_type == 'living':
+            return models.LivingResource.objects.all()
 
+        return models.BaseResource.objects.all()
+    
+    #def get_context_data(self, **kwargs):
+    #    context =  super().get_context_data(**kwargs)
+    #    context['creator'] = get_object_or_404(models.User, self.kwargs.get('pk'))
+    #    return context
 
-class AddOfficeResourceView(LoginRequiredMixin, CreateView):
-    model  = models.OfficeResource
-    form_class = OfficeForm
-    template_name = "rooms/office_form.html"
-    context_object_name = "office"
+    
+    def get_form_class(self):
+        resource_type = self.kwargs.get('resource_type')
+        if resource_type == 'sport':
+            return forms.SportForm
+        
+        elif resource_type == 'office':
+            return forms.OfficeForm
+        
+        elif resource_type == 'event':
+            return forms.EventForm
+        
+        elif resource_type == 'beauty':
+            return forms.BeautyForm
+        
+        elif resource_type == 'living':
+            return forms.LivingForm
+        
+    def get_template_names(self):
+        resource_type = self.kwargs.get('resource_type')
 
+        if resource_type == 'sport':
+            return ['rooms/sport_form.html']
+        
+        elif resource_type == 'office':
+            return ['rooms/office_form.html']
+        
+        elif resource_type == 'event':
+            return ['rooms/event_form.html']
+        
+        elif resource_type == 'beauty':
+            return ['rooms/beauty_form.html']
+        
+        elif resource_type == 'living':
+            return ['rooms/living_form.html']
+    
+    def form_valid(self, form):
+        resource_type = self.kwargs.get('resource_type')
+        form.instance.creator = self.request.user
+        if resource_type == 'sport':
+            form.instance.category = 'SPORT'
+        
+        elif resource_type == 'office':
+            form.instance.category = 'OFFICE'
+        
+        elif resource_type == 'event':
+            form.instance.category = 'EVENT'
+        
+        elif resource_type == 'beauty':
+            form.instance.category = 'BEAUTY'
+        
+        elif resource_type == 'living':
+            form.instance.category = 'LIVING'
+        
+        return super().form_valid(form)
 
-class AddEventResourceView(LoginRequiredMixin, CreateView):
-    model = models.EventResource
-    form_class = EventForm
-    template_name = "rooms/event_form.html"
-    context_object_name = "event"
-
-
-class AddBeautyResourceView(LoginRequiredMixin, CreateView):
-    model = models.BeautyResource
-    form_class = BeautyForm
-    template_name = "rooms/beauty_form.html"
-    context_object_name = "beauty"
-
-
-class AddLivingResourceView(LoginRequiredMixin, CreateView):
-    model = models.LivingResource
-    form_class = LivingForm
-    template_name = "rooms/living_form.html"
-    context_object_name = "living"
+    
 
 
 class DeleteResourceView(LoginRequiredMixin, DeleteView):
@@ -71,19 +121,19 @@ def edit_resource(request, pk):
 
     if hasattr(base_resource, 'sportresource'):
         instance = base_resource.sportresource
-        form_class = SportForm
+        form_class = forms.SportForm
     elif hasattr(base_resource, 'officeresource'):
         instance = base_resource.officeresource
-        form_class = OfficeForm
+        form_class = forms.OfficeForm
     elif hasattr(base_resource, 'eventresource'):
         instance = base_resource.eventresource
-        form_class = EventForm
+        form_class = forms.EventForm
     elif hasattr(base_resource, 'beautyresource'):
         instance = base_resource.beautyresource
-        form_class = BeautyForm
+        form_class = forms.BeautyForm
     elif hasattr(base_resource, 'livingresource'):
         instance = base_resource.livingresource
-        form_class = LivingForm
+        form_class = forms.LivingForm
     
     if request.method == 'POST':
         form = form_class(request.POST, request.FILES, instance=instance)
