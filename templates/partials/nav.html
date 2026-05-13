@@ -13,11 +13,11 @@
       Dodaj
     </button>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="{% url 'rooms:add_resource sport' %}">przestrzeń sport</a></li>
-          <li><a class="dropdown-item" href="{% url 'rooms:add_resource office' %}">przestrzeń biurowa</a></li>
-          <li><a class="dropdown-item" href="{% url 'rooms:add_resource event' %}">przestrzeń eventowa</a></li>
-          <li><a class="dropdown-item" href="{% url 'rooms:add_resource beauty' %}">przestrzeń branży beauty</a></li>
-          <li><a class="dropdown-item" href="{% url 'rooms:add_resource living' %}">przestrzeń mieszkalna</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_resource' 'sport'%}">przestrzeń sport</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_resource' 'office' %}">przestrzeń biurowa</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_resource' 'event' %}">przestrzeń eventowa</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_resource' 'beauty' %}">przestrzeń branży beauty</a></li>
+          <li><a class="dropdown-item" href="{% url 'rooms:add_resource' 'living' %}">przestrzeń mieszkalna</a></li>
         </ul>
       </div>
     </div>

@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 
 
 class AddResourceView(LoginRequiredMixin, CreateView):
-
+    success_url = reverse_lazy('rooms:resource_list')
+    
     def get_queryset(self):
         resource_type = self.kwargs.get('resource_type')
         if resource_type == 'sport':
@@ -28,8 +29,14 @@ class AddResourceView(LoginRequiredMixin, CreateView):
 
         return models.BaseResource.objects.all()
     
+    #def get_context_data(self, **kwargs):
+    #    context =  super().get_context_data(**kwargs)
+    #    context['creator'] = get_object_or_404(models.User, self.kwargs.get('pk'))
+    #    return context
+
+    
     def get_form_class(self):
-        resource_type = self.kwargs.get('form_class')
+        resource_type = self.kwargs.get('resource_type')
         if resource_type == 'sport':
             return forms.SportForm
         
@@ -46,26 +53,44 @@ class AddResourceView(LoginRequiredMixin, CreateView):
             return forms.LivingForm
         
     def get_template_names(self):
-        resource_type = self.kwargs.get('template_type')
+        resource_type = self.kwargs.get('resource_type')
 
         if resource_type == 'sport':
             return ['rooms/sport_form.html']
         
         elif resource_type == 'office':
-            return ['romms/office_form.html']
+            return ['rooms/office_form.html']
         
         elif resource_type == 'event':
             return ['rooms/event_form.html']
         
         elif resource_type == 'beauty':
-            return ['rooms/beauty_type.html']
+            return ['rooms/beauty_form.html']
         
         elif resource_type == 'living':
-            return ['rooms/living_resource.html']
+            return ['rooms/living_form.html']
     
     def form_valid(self, form):
+        resource_type = self.kwargs.get('resource_type')
         form.instance.creator = self.request.user
+        if resource_type == 'sport':
+            form.instance.category = 'SPORT'
+        
+        elif resource_type == 'office':
+            form.instance.category = 'OFFICE'
+        
+        elif resource_type == 'event':
+            form.instance.category = 'EVENT'
+        
+        elif resource_type == 'beauty':
+            form.instance.category = 'BEAUTY'
+        
+        elif resource_type == 'living':
+            form.instance.category = 'LIVING'
+        
         return super().form_valid(form)
+
+    
 
 
 class DeleteResourceView(LoginRequiredMixin, DeleteView):

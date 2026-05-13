@@ -7,7 +7,7 @@
 {% block container %}
 
 
-    <form action="{% url 'rooms:add_living' %}" method="post">
+    <form action="{% url 'rooms:add_resource' 'living' %}" method="post">
         {% csrf_token %}
         {{ form|crispy }}
 
