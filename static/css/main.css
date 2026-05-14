@@ -1,0 +1,55 @@
+img{
+    width: 100%;
+}
+
+.card{
+    height: 100%;
+
+}
+
+.card-body{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.img-container {
+    position: relative;
+    width: 100%;
+    height: 200px; /* Zmniejszyłem z 250px, żeby było zgrabniejsze */
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+}
+
+/* FIX NA ROZCIĄGANIE */
+.img-fix {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* TO JEST KLUCZ: zachowuje proporcje, obcina nadmiar */
+    object-position: center;     /* Środek zdjęcia zawsze widoczny */
+    display: block;
+}
+
+/* Serce - teraz mniejsze i lepiej widoczne */
+.btn-heart {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    z-index: 5;
+    cursor: pointer;
+}
+
+.btn-heart svg {
+    width: 28px;
+    height: 28px;
+    fill: white;
+    filter: drop-shadow(0 0 3px rgba(0,0,0,0.6));
+    transition: transform 0.2s ease;
+}
+
+.btn-heart:hover svg {
+    transform: scale(1.1);
+}

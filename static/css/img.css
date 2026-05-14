@@ -1,8 +1,0 @@
-.class-img-top {
-    width: 100% !important;       
-    height: 250px !important;     
-    object-fit: cover; 
-    border-radius: 8px;
-    background-color: #f0f0f0; 
-    display: block;
-}
