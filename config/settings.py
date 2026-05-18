@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     #app
     'rooms',
     'users',
-    'reservation'
+    'reservation',
+    'picked'
 ]
 
 MIDDLEWARE = [
