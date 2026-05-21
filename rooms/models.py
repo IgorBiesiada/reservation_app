@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from polymorphic.models import PolymorphicModel
 
 class Modified(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Stworzony")  
@@ -9,7 +10,7 @@ class Modified(models.Model):
         abstract = True
 
 
-class BaseResource(Modified):
+class BaseResource(Modified, PolymorphicModel):
     class Category(models.TextChoices):
         SPORT = 'SPORT', 'Obiekt sportowy'
         OFFICE = 'OFFICE', 'Przestrzeń biurowa'
@@ -24,7 +25,7 @@ class BaseResource(Modified):
     address = models.CharField(max_length=255, verbose_name="Adres")
     city = models.CharField(max_length=100, verbose_name="Miasto")
     description = models.TextField(max_length=2000, blank=True, verbose_name="Opis")  
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, name='creator') 
+    creator = models.ForeignKey(User, on_delete=models.CASCADE) 
     
     class Meta:
         verbose_name = "Zasób bazowy"
@@ -32,7 +33,16 @@ class BaseResource(Modified):
     def __str__(self):
         return self.name
 
-
+    def get_form_template(self, template_type=''):
+        allowed_type = ('form', 'detail')
+        
+        if template_type not in allowed_type:
+            raise ValueError("you need to pass a form or detail")
+        
+        else:
+            model_name = self._meta.model_name.replace('resource', '')
+            return f'rooms/{model_name}_{template_type}.html'
+    
 # --- MODELE SPECYFICZNE ---
 
 class SportResource(BaseResource):

@@ -6,6 +6,9 @@ from . import models
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
+from polymorphic.contrib.extra_views import PolymorphicFormSetView
+from polymorphic.formsets import PolymorphicFormSetChild
+
 
 class AddResourceView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('rooms:resource_list')
@@ -90,8 +93,23 @@ class AddResourceView(LoginRequiredMixin, CreateView):
         
         return super().form_valid(form)
 
-    
+class ArticleFormSetView(PolymorphicFormSetView):    
+    model = models.BaseResource
+    template_name = "rooms/base_form.html"
+    success_url = reverse_lazy("rooms:resource_list")
+    fields = "__all__"
 
+    # extra will add two empty forms for models in the order of their appearance
+    # in formset_children
+    factory_kwargs = {"extra": 5, "can_delete": True}
+
+    formset_children = [
+        PolymorphicFormSetChild(models.SportResource, form=forms.SportForm),
+        PolymorphicFormSetChild(models.EventResource, form=forms.EventForm),
+        PolymorphicFormSetChild(models.LivingResource, form=forms.LivingForm),
+        PolymorphicFormSetChild(models.OfficeResource, form=forms.OfficeForm),
+        PolymorphicFormSetChild(models.BeautyResource, form=forms.BeautyForm)
+    ]
 
 class DeleteResourceView(LoginRequiredMixin, DeleteView):
     model = models.BaseResource
@@ -104,15 +122,6 @@ class ResourceListView(ListView):
     model = models.BaseResource  
     template_name = 'rooms/resource_list.html'  
     context_object_name = 'resources'  
-
-    def get_queryset(self):
-        return models.BaseResource.objects.select_related(
-            'sportresource', 
-            'officeresource', 
-            'eventresource', 
-            'beautyresource', 
-            'livingresource'
-        ).all()
         
 
 @login_required
@@ -149,12 +158,11 @@ def edit_resource(request, pk):
 def detail_resource(request, pk):
     base_resource = get_object_or_404(models.BaseResource, pk=pk)
 
-    instance = base_resource
     template_name = 'rooms/base_detail.html' 
 
     # 2. Sprawdzamy konkretne typy
-    if hasattr(base_resource, 'sportresource'):
-        instance = base_resource.sportresource
+    if base_resource.objects.instance_of(models.SportResource):
+        instance = base_resource.objects.instance_of(models.SportResource)
         template_name = 'rooms/sport_detail.html'
     
     elif hasattr(base_resource, 'officeresource'):
