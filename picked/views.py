@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from picked.models import Favorite
 from rooms.models import BaseResource
 from django.shortcuts import redirect
@@ -6,14 +6,17 @@ from django.http import HttpResponse
 # Create your views here.
 
 def add_to_favorite(request, pk):
+    resource = get_object_or_404(BaseResource, pk=pk)
+    
     if request.user.is_authenticated:
-        valid_data = Favorite.objects.filter(resource=pk)
-        if valid_data:
-            Favorite.objects.delete(user=request.user, resource=pk)
+        
+        valid_data = Favorite.objects.filter(resource=resource)
+        if valid_data.exists():
+            valid_data.delete()
             return redirect('rooms:resource_list')
         
         else:
-            Favorite.objects.create(user=request.user, resource=pk)
+            Favorite.objects.create(user=request.user, resource=resource)
             return redirect('rooms:resource_list')
     
     else:
