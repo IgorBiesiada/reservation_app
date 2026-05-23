@@ -2,6 +2,7 @@ from django.db import models
 from users.models import User
 from polymorphic.models import PolymorphicModel
 
+
 class Modified(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Stworzony")  
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Zaktualizowany")
@@ -33,15 +34,6 @@ class BaseResource(Modified, PolymorphicModel):
     def __str__(self):
         return self.name
 
-    def get_form_template(self, template_type=''):
-        allowed_type = ('form', 'detail')
-        
-        if template_type not in allowed_type:
-            raise ValueError("you need to pass a form or detail")
-        
-        else:
-            model_name = self._meta.model_name.replace('resource', '')
-            return f'rooms/{model_name}_{template_type}.html'
     
 # --- MODELE SPECYFICZNE ---
 
@@ -57,12 +49,28 @@ class SportResource(BaseResource):
     is_outside = models.BooleanField(default=False, verbose_name='Na zewnątrz')
     capacity = models.PositiveIntegerField(null=True, blank=True, verbose_name='Liczba graczy')
 
+   
+    def get_template(self, template_type=''):
+        valid_types = ('form', 'detail')
+        if template_type not in valid_types:
+            raise ValueError("pass form or detail")
+        
+        return f'room/sport_{template_type}'
+
 
 class OfficeResource(BaseResource):
     desks = models.PositiveIntegerField(verbose_name='Liczba biurek')
     meeting_rooms = models.PositiveIntegerField(default=0, verbose_name='Liczba sal konferencyjnych') 
     has_wifi = models.BooleanField(default=True, verbose_name="WIFI")
     has_parking = models.BooleanField(default=False, verbose_name="Parking")
+
+    
+    def get_template(self, template_type=''):
+        valid_types = ('form', 'detail')
+        if template_type not in valid_types:
+            raise ValueError("pass form or detail")
+        
+        return f'room/office_{template_type}'
 
 
 class EventResource(BaseResource):
@@ -87,7 +95,7 @@ class EventResource(BaseResource):
     parking = models.BooleanField(default=False, verbose_name='Parking')
     wifi = models.BooleanField(default=True, verbose_name='WIFI')
 
-
+    
 class BeautyResource(BaseResource):
     class BeautyType(models.TextChoices):
         HAIRDRESSER = 'HAIRDRESSER', 'Fryzjer'
@@ -105,6 +113,14 @@ class BeautyResource(BaseResource):
     parking = models.BooleanField(default=False, verbose_name='Parking')
     wifi = models.BooleanField(default=True, verbose_name='WIFI')
 
+    
+    def get_template(self, template_type=''):
+        valid_types = ('form', 'detail')
+        if template_type not in valid_types:
+            raise ValueError("pass form or detail")
+        
+        return f'room/beauty_{template_type}'
+
 
 class LivingResource(BaseResource):
     class LivingType(models.TextChoices):
@@ -120,6 +136,13 @@ class LivingResource(BaseResource):
     capacity = models.PositiveIntegerField(verbose_name='Liczba osób')
     full_equipment = models.BooleanField(default=False, verbose_name='Pełne wyposażenie')
 
+    
+    def get_template(self, template_type=''):
+        valid_types = ('form', 'detail')
+        if template_type not in valid_types:
+            raise ValueError("pass form or detail")
+        
+        return f'room/living_{template_type}'
 
 class ResourceImage(models.Model):
     image = models.ImageField(upload_to="resource_images/")
