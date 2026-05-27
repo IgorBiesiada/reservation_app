@@ -4,7 +4,7 @@ from polymorphic.models import PolymorphicModel
 
 
 class Modified(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Stworzony")  
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Stworzony")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Zaktualizowany")
 
     class Meta:
@@ -20,21 +20,21 @@ class BaseResource(Modified, PolymorphicModel):
         LIVING = 'LIVING', 'Przestrzeń mieszkalna'
 
     category = models.CharField(max_length=50, choices=Category.choices, verbose_name="Typ kategorii")
-    name = models.CharField(max_length=100, verbose_name="Nazwa")  
+    name = models.CharField(max_length=100, verbose_name="Nazwa")
     equipment = models.TextField(blank=True, verbose_name="Wyposażenie")
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Cena za h')
     address = models.CharField(max_length=255, verbose_name="Adres")
     city = models.CharField(max_length=100, verbose_name="Miasto")
-    description = models.TextField(max_length=2000, blank=True, verbose_name="Opis")  
-    creator = models.ForeignKey(User, on_delete=models.CASCADE) 
-    
+    description = models.TextField(max_length=2000, blank=True, verbose_name="Opis")
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+
     class Meta:
         verbose_name = "Zasób bazowy"
 
     def __str__(self):
         return self.name
 
-    
+
 # --- MODELE SPECYFICZNE ---
 
 class SportResource(BaseResource):
@@ -49,28 +49,28 @@ class SportResource(BaseResource):
     is_outside = models.BooleanField(default=False, verbose_name='Na zewnątrz')
     capacity = models.PositiveIntegerField(null=True, blank=True, verbose_name='Liczba graczy')
 
-   
+
     def get_template(self, template_type=''):
         valid_types = ('form', 'detail')
         if template_type not in valid_types:
             raise ValueError("pass form or detail")
-        
-        return f'room/sport_{template_type}'
+
+        return f'rooms/sport_{template_type}.html'
 
 
 class OfficeResource(BaseResource):
     desks = models.PositiveIntegerField(verbose_name='Liczba biurek')
-    meeting_rooms = models.PositiveIntegerField(default=0, verbose_name='Liczba sal konferencyjnych') 
+    meeting_rooms = models.PositiveIntegerField(default=0, verbose_name='Liczba sal konferencyjnych')
     has_wifi = models.BooleanField(default=True, verbose_name="WIFI")
     has_parking = models.BooleanField(default=False, verbose_name="Parking")
 
-    
+
     def get_template(self, template_type=''):
         valid_types = ('form', 'detail')
         if template_type not in valid_types:
             raise ValueError("pass form or detail")
-        
-        return f'room/office_{template_type}'
+
+        return f'rooms/office_{template_type}.html'
 
 
 class EventResource(BaseResource):
@@ -84,9 +84,9 @@ class EventResource(BaseResource):
         ONLINE = 'ONLINE', 'Online'
         HYBRID = 'HYBRID', 'Hybrydowy'
         ONSITE = 'ONSITE', 'Stacjonarny'
-    
+
     event_type = models.CharField(max_length=50, choices=EventType.choices, verbose_name='Typ eventu')
-    event_mode = models.CharField(max_length=50, choices=EventMode.choices, verbose_name='Tryb eventu')  
+    event_mode = models.CharField(max_length=50, choices=EventMode.choices, verbose_name='Tryb eventu')
     capacity = models.PositiveIntegerField(verbose_name='Liczba miejsc')
     sound_system = models.BooleanField(default=False, verbose_name='Nagłośnienie')
     tv_set = models.BooleanField(default=False, verbose_name='Telewizor/Ekran')
@@ -95,7 +95,7 @@ class EventResource(BaseResource):
     parking = models.BooleanField(default=False, verbose_name='Parking')
     wifi = models.BooleanField(default=True, verbose_name='WIFI')
 
-    
+
 class BeautyResource(BaseResource):
     class BeautyType(models.TextChoices):
         HAIRDRESSER = 'HAIRDRESSER', 'Fryzjer'
@@ -103,23 +103,23 @@ class BeautyResource(BaseResource):
         NAILS = 'NAILS', 'Paznokcie'
         COSMETOLOGY = 'COSMETOLOGY', 'Kosmetologia'
         MASSAGE = 'MASSAGE', 'Masaż'
-    
+
     beauty_type = models.CharField(max_length=50, choices=BeautyType.choices, verbose_name='Typ salonu')
-    chairs = models.PositiveIntegerField(null=True, blank=True, verbose_name='Liczba foteli')  
-    beds = models.PositiveIntegerField(null=True, blank=True, verbose_name='Liczba łóżek')    
+    chairs = models.PositiveIntegerField(null=True, blank=True, verbose_name='Liczba foteli')
+    beds = models.PositiveIntegerField(null=True, blank=True, verbose_name='Liczba łóżek')
     has_mirror = models.BooleanField(default=True, verbose_name='Lustro')
     has_sink = models.BooleanField(default=False, verbose_name='Zlew')
     has_shower = models.BooleanField(default=False, verbose_name='Prysznic')
     parking = models.BooleanField(default=False, verbose_name='Parking')
     wifi = models.BooleanField(default=True, verbose_name='WIFI')
 
-    
+
     def get_template(self, template_type=''):
         valid_types = ('form', 'detail')
         if template_type not in valid_types:
             raise ValueError("pass form or detail")
-        
-        return f'room/beauty_{template_type}'
+
+        return f'rooms/beauty_{template_type}.html'
 
 
 class LivingResource(BaseResource):
@@ -136,13 +136,13 @@ class LivingResource(BaseResource):
     capacity = models.PositiveIntegerField(verbose_name='Liczba osób')
     full_equipment = models.BooleanField(default=False, verbose_name='Pełne wyposażenie')
 
-    
+
     def get_template(self, template_type=''):
         valid_types = ('form', 'detail')
         if template_type not in valid_types:
             raise ValueError("pass form or detail")
-        
-        return f'room/living_{template_type}'
+
+        return f'rooms/living_{template_type}.html'
 
 class ResourceImage(models.Model):
     image = models.ImageField(upload_to="resource_images/")
@@ -150,4 +150,3 @@ class ResourceImage(models.Model):
 
     def __str__(self):
         return f"Zdjęcie dla {self.resource}"
-    
