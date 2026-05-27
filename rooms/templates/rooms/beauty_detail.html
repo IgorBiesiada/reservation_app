@@ -1,13 +1,13 @@
-{% extends 'base.html' %}
-
-{% block container %}
+{% extends 'base.html' %} {% block container %}
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow border-0">
                 <div class="card-header bg-info text-white py-3">
                     <h2 class="mb-0">✨ {{ resource.name }}</h2>
-                    <p class="mb-0 opacity-75">{{ resource.get_beauty_type_display }}</p>
+                    <p class="mb-0 opacity-75">
+                        {{ resource.get_beauty_type_display }}
+                    </p>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title border-bottom pb-2">Stanowiska</h5>
@@ -17,8 +17,7 @@
                             <p class="text-muted mb-0">Fotele</p>
                             <h3>{{ resource.chairs }}</h3>
                         </div>
-                        {% endif %}
-                        {% if resource.beds %}
+                        {% endif %} {% if resource.beds %}
                         <div class="col">
                             <p class="text-muted mb-0">Łóżka zabiegowe</p>
                             <h3>{{ resource.beds }}</h3>
@@ -26,22 +25,49 @@
                         {% endif %}
                     </div>
 
-                    <h5 class="card-title border-bottom pb-2">Standard lokalu</h5>
+                    <h5 class="card-title border-bottom pb-2">
+                        Standard lokalu
+                    </h5>
                     <ul class="list-group list-group-flush mb-4">
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Lustro:</span> <span>{{ resource.has_mirror|yesno:"Tak,Nie" }}</span>
+                        <li
+                            class="list-group-item d-flex justify-content-between"
+                        >
+                            <span>Lustro:</span>
+                            <span
+                                >{{ resource.has_mirror|yesno:"Tak,Nie" }}</span
+                            >
                         </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Zlew/Umywalka:</span> <span>{{ resource.has_sink|yesno:"Tak,Nie" }}</span>
+                        <li
+                            class="list-group-item d-flex justify-content-between"
+                        >
+                            <span>Zlew/Umywalka:</span>
+                            <span>{{ resource.has_sink|yesno:"Tak,Nie" }}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Prysznic:</span> <span>{{ resource.has_shower|yesno:"Tak,Nie" }}</span>
+                        <li
+                            class="list-group-item d-flex justify-content-between"
+                        >
+                            <span>Prysznic:</span>
+                            <span
+                                >{{ resource.has_shower|yesno:"Tak,Nie" }}</span
+                            >
                         </li>
                     </ul>
                 </div>
-                <div class="card-footer bg-white d-flex justify-content-between py-3">
-                    <a href="{% url 'rooms:resource_list' %}" class="btn btn-outline-secondary">Wróć</a>
-                    <a href="{% url 'rooms:edit_resource' resource.pk %}" class="btn btn-warning">Edytuj</a>
+                <div
+                    class="card-footer bg-white d-flex justify-content-between py-3"
+                >
+                    <a
+                        href="{% url 'rooms:resource_list' %}"
+                        class="btn btn-outline-secondary"
+                        >Wróć</a
+                    >
+                    {% if request.user == resource.creator %}
+                    <a
+                        href="{% url 'rooms:edit_resource' resource.pk %}"
+                        class="btn btn-warning"
+                        >Edytuj</a
+                    >
+                    {% endif %}
                 </div>
             </div>
         </div>

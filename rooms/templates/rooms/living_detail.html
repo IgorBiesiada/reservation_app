@@ -1,19 +1,21 @@
-{% extends 'base.html' %}
-
-{% block container %}
+{% extends 'base.html' %} {% block container %}
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow border-0">
                 <div class="card-header bg-warning text-dark py-3">
                     <h2 class="mb-0">🏠 {{ resource.name }}</h2>
-                    <p class="mb-0 opacity-75">{{ resource.get_living_type_display }}</p>
+                    <p class="mb-0 opacity-75">
+                        {{ resource.get_living_type_display }}
+                    </p>
                 </div>
                 <div class="card-body">
                     <div class="row mb-4">
                         <div class="col-6">
                             <p class="text-muted mb-0">Pokoje</p>
-                            <p class="fw-bold fs-5">{{ resource.rooms_count }}</p>
+                            <p class="fw-bold fs-5">
+                                {{ resource.rooms_count }}
+                            </p>
                         </div>
                         <div class="col-6 text-end">
                             <p class="text-muted mb-0">Max. osób</p>
@@ -23,25 +25,50 @@
 
                     <h5 class="card-title border-bottom pb-2">Wyposażenie</h5>
                     <ul class="list-group list-group-flush mb-4">
-                        <li class="list-group-item d-flex justify-content-between">
+                        <li
+                            class="list-group-item d-flex justify-content-between"
+                        >
                             <span>Pełne wyposażenie:</span>
-                            <span class="badge {% if resource.full_equipment %}bg-success{% else %}bg-secondary{% endif %}">
+                            <span
+                                class="badge {% if resource.full_equipment %}bg-success{% else %}bg-secondary{% endif %}"
+                            >
                                 {{ resource.full_equipment|yesno:"Tak,Nie" }}
                             </span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>WIFI:</span> <span>{{ resource.wifi|yesno:"Tak,Nie" }}</span>
+                        <li
+                            class="list-group-item d-flex justify-content-between"
+                        >
+                            <span>WIFI:</span>
+                            <span>{{ resource.wifi|yesno:"Tak,Nie" }}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Parking:</span> <span>{{ resource.parking|yesno:"Tak,Nie" }}</span>
+                        <li
+                            class="list-group-item d-flex justify-content-between"
+                        >
+                            <span>Parking:</span>
+                            <span>{{ resource.parking|yesno:"Tak,Nie" }}</span>
                         </li>
                     </ul>
-                    
-                    <p class="bg-light p-3 rounded small">{{ resource.description }}</p>
+
+                    <p class="bg-light p-3 rounded small">
+                        {{ resource.description }}
+                    </p>
                 </div>
-                <div class="card-footer bg-white d-flex justify-content-between py-3">
-                    <a href="{% url 'rooms:resource_list' %}" class="btn btn-outline-secondary">Wróć</a>
-                    <a href="{% url 'rooms:edit_resource' resource.pk %}" class="btn btn-warning">Edytuj</a>
+                <div
+                    class="card-footer bg-white d-flex justify-content-between py-3"
+                >
+                    <a
+                        href="{% url 'rooms:resource_list' %}"
+                        class="btn btn-outline-secondary"
+                        >Wróć</a
+                    >
+
+                    {% if request.user == resource.creator %}
+                    <a
+                        href="{% url 'rooms:edit_resource' resource.pk %}"
+                        class="btn btn-warning"
+                        >Edytuj</a
+                    >
+                    {% endif %}
                 </div>
             </div>
         </div>
